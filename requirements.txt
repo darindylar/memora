@@ -1,0 +1,10 @@
+reflex==0.5.*
+sqlmodel
+chromadb==0.5.*
+pydantic
+pypdf
+pytesseract
+Pillow
+python-docx
+openai
+
