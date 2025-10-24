@@ -7,4 +7,5 @@ pytesseract
 Pillow
 python-docx
 openai
+psycopg[binary]
 
