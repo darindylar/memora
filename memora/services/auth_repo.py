@@ -4,16 +4,17 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
 import bcrypt
-from .supabase_client import supabase
+from .supabase_client import get_client
 
 def _first(data: Optional[List[dict]]) -> Optional[dict]:
     return data[0] if (data and len(data) > 0) else None
 
 def create_user(username: str, email: str, password_plain: str) -> Dict[str, Any]:
     pw_hash = bcrypt.hashpw(password_plain.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    sb = get_client()
 
     try:
-        supabase.table("users").insert({
+        sb.table("users").insert({
             "username": username,
             "email": email,
             "password_hash": pw_hash,
@@ -23,7 +24,7 @@ def create_user(username: str, email: str, password_plain: str) -> Dict[str, Any
 
     try:
         get_res = (
-            supabase.table("users")
+            sb.table("users")
             .select("id, username, email, created_at")
             .eq("email", email)
             .execute()
@@ -37,9 +38,10 @@ def create_user(username: str, email: str, password_plain: str) -> Dict[str, Any
     return row
 
 def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
+    sb = get_client()
     try:
         res = (
-            supabase.table("users")
+            sb.table("users")
             .select("id, username, email, password_hash, created_at")
             .eq("email", email)
             .execute()
@@ -49,9 +51,10 @@ def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
         return None
 
 def get_user_by_username(username: str) -> Optional[Dict[str, Any]]:
+    sb = get_client()
     try:
         res = (
-            supabase.table("users")
+            sb.table("users")
             .select("id, username, email, password_hash, created_at")
             .eq("username", username)
             .execute()
@@ -67,10 +70,11 @@ def verify_password(password_plain: str, password_hash: str) -> bool:
         return False
 
 def create_session(user_id: int) -> str:
+    sb = get_client()
     token = secrets.token_urlsafe(48)
     expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
     try:
-        supabase.table("sessions").insert({
+        sb.table("sessions").insert({
             "token": token,
             "user_id": user_id,
             "expires_at": expires_at,
@@ -80,9 +84,10 @@ def create_session(user_id: int) -> str:
     return token
 
 def get_user_by_token(token: str) -> Optional[Dict[str, Any]]:
+    sb = get_client()
     try:
         ses_res = (
-            supabase.table("sessions")
+            sb.table("sessions")
             .select("token, user_id, expires_at")
             .eq("token", token)
             .execute()
@@ -98,14 +103,14 @@ def get_user_by_token(token: str) -> Optional[Dict[str, Any]]:
         if ses_row.get("expires_at"):
             expires = datetime.fromisoformat(ses_row["expires_at"].replace("Z", "+00:00"))
             if datetime.now(timezone.utc) > expires:
-                supabase.table("sessions").delete().eq("token", token).execute()
+                sb.table("sessions").delete().eq("token", token).execute()
                 return None
     except Exception:
         pass
 
     try:
         user_res = (
-            supabase.table("users")
+            sb.table("users")
             .select("id, username, email, created_at")
             .eq("id", ses_row["user_id"])
             .execute()
@@ -115,7 +120,8 @@ def get_user_by_token(token: str) -> Optional[Dict[str, Any]]:
         return None
 
 def delete_session(token: str) -> None:
+    sb = get_client()
     try:
-        supabase.table("sessions").delete().eq("token", token).execute()
+        sb.table("sessions").delete().eq("token", token).execute()
     except Exception:
         pass

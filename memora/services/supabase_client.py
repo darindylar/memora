@@ -1,14 +1,21 @@
+# memora/services/supabase_client.py
 from __future__ import annotations
 import os
+from functools import lru_cache
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+def _get_url_and_key():
+    url = os.getenv("SUPABASE_URL", "").strip()
+    key = (os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY") or "").strip()
+    return url, key
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("Missing SUPABASE_URL or SUPABASE_KEY in environment.")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+@lru_cache(maxsize=1)
+def get_client() -> Client:
+    url, key = _get_url_and_key()
+    if not url or not key:
+        raise RuntimeError(
+        )
+    return create_client(url, key)
