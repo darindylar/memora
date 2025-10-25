@@ -1,5 +1,7 @@
 # memora/pages/index.py
 import reflex as rx
+from memora.state.auth_state import AuthState
+from memora.components.footer import footer
 
 try:
     from dotenv import load_dotenv  
@@ -59,7 +61,6 @@ def index() -> rx.Component:
                 py="24px",
             ),
 
-            # Increased gap between the four boxes using spacing and gap
             rx.grid(
                 _card(
                     "Your Decks",
@@ -94,13 +95,7 @@ def index() -> rx.Component:
 
             rx.spacer(),
 
-            rx.hstack(
-                rx.text("memora", size="2", color="gray"),
-                rx.spacer(),
-                rx.link("Status", href="/test", underline="hover"),
-                rx.link("Settings", href="/settings", underline="hover"),
-                width="100%",
-            ),
+            footer(),
             spacing="6",
             width="100%",
         ),
