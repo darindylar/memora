@@ -85,7 +85,7 @@ def index() -> rx.Component:
                     "Insights",
                     "/insights",
                 ),
-                columns="4",
+                columns=rx.breakpoints(initial="1", sm="2", md="2", lg="4"),
                 width="100%",
                 spacing="6",      
                 justify="center",  
