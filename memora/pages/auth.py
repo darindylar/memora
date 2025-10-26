@@ -1,6 +1,7 @@
 # memora/pages/auth.py
 import reflex as rx
 from memora.components.footer import footer
+from memora.components.heading import heading
 
 def _primary_button(label: str, href: str) -> rx.Component:
     return rx.link(
@@ -32,7 +33,7 @@ def auth() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.vstack(
-                rx.text("memora", size="9", weight="bold"),
+                heading(),
                 rx.text(
                     "Here you are able to log in to your memora account, or sign up if you don't have one, and begin your studies.",
                     size="4",

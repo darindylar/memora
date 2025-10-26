@@ -2,6 +2,7 @@
 import reflex as rx
 from memora.state.auth_state import AuthState
 from memora.components.footer import footer
+from memora.components.heading import heading
 
 try:
     from dotenv import load_dotenv  
@@ -42,7 +43,7 @@ def index() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.vstack(
-                rx.text("memora", size="9", weight="bold"),
+                heading(),
                 rx.text(
                     "AI-powered flashcards with spaced repetition, imports, and quizzes.",
                     size="4",
