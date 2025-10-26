@@ -9,7 +9,7 @@ def footer() -> rx.Component:
             rx.text("|", size="3", color="gray"),
             rx.text("You are logged in.", size="3", color="gray"),
             rx.spacer(),
-            rx.link("Status", href="/test", underline="hover"),
+            rx.link("Logout", href="/logout", underline="hover"),
             rx.link("Settings", href="/settings", underline="hover"),
             width="100%",
             padding_y="1em",
@@ -17,9 +17,9 @@ def footer() -> rx.Component:
         rx.hstack(
             rx.text("memora", size="3", color="gray", weight="bold"),
             rx.spacer(),
-            rx.link("Status", href="/test", underline="hover"),
+            rx.link("Login", href="/auth", underline="hover"),
             rx.link("Settings", href="/settings", underline="hover"),
-            width="100%",
+            width="100%", 
             padding_y="1em",
         ),
     )

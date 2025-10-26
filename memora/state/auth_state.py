@@ -1,5 +1,6 @@
 from __future__ import annotations
 import reflex as rx
+from typing import Optional
 from memora.services.auth_repo import (
     create_user,
     get_user_by_email,
@@ -16,6 +17,10 @@ class AuthState(rx.State):
     password: str = ""
     error: str = ""
     loading: bool = False
+    session_token: str = rx.Cookie(
+    name="session_token", path="/", secure=True, same_site="lax", max_age=60*60*24*30
+    )
+    user: Optional[dict] = None
 
     session_token: str = rx.Cookie(
         "", name="memora_token", path="/", max_age=60 * 60 * 24 * 7, same_site="lax"
@@ -55,6 +60,14 @@ class AuthState(rx.State):
             user = create_user(self.username, self.email, self.password)
             token = create_session(user["id"])
             self.session_token = token
+            rx.set_cookie(
+                "session_token",
+                token,
+                max_age=60 * 60 * 24 * 30,  
+                httponly=True,
+                samesite="Lax",
+                secure=True, 
+            )
             return rx.redirect("/")
         except Exception as e:
             self.error = str(e) or "Could not sign up."
@@ -92,9 +105,27 @@ class AuthState(rx.State):
     def require_login(self):
         if not self.session_token:
             return rx.redirect("/auth")
+
         user = get_user_by_token(self.session_token)
         if not user:
             self.session_token = ""
+            rx.remove_cookie("session_token")
             return rx.redirect("/auth")
+
         self.current_user_email = user["email"]
         self.current_username = user["username"]
+
+    def logout(self):
+        token = self.session_token
+        if token:
+            try:
+                delete_session(token)  
+            except Exception:
+                pass
+
+        self.session_token = ""   
+        self.current_username = "" 
+        self.current_user_email = "" 
+        self.user = None
+
+        return rx.redirect("/auth")

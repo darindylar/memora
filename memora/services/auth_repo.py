@@ -118,6 +118,10 @@ def get_user_by_token(token: str) -> Optional[Dict[str, Any]]:
         return _first(user_res.data)
     except Exception:
         return None
+    
+def sign_out():
+    client = get_client()
+    client.auth.sign_out()
 
 def delete_session(token: str) -> None:
     sb = get_client()

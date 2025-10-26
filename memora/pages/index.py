@@ -63,25 +63,25 @@ def index() -> rx.Component:
 
             rx.grid(
                 _card(
-                    "Your Decks",
+                    "Your Decks 🗃️",
                     "Browse, edit, and share your flashcard decks.",
                     "Open Decks",
                     "/decks",
                 ),
                 _card(
-                    "Generate from Notes",
+                    "Create from Notes 📄",
                     "Upload PDF/image/text; auto-generate flashcards.",
                     "Import",
                     "/import",
                 ),
                 _card(
-                    "Practice & Review",
+                    "Practice & Review 🧪",
                     "Smart scheduling with spaced repetition.",
                     "Practice",
                     "/practice",
                 ),
                 _card(
-                    "Insights",
+                    "Insights 📊",
                     "Track progress, streaks, and weak topics.",
                     "Insights",
                     "/insights",
