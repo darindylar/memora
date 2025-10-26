@@ -1,4 +1,4 @@
-reflex==0.5.*
+reflex>=0.8.16
 sqlmodel
 chromadb==0.5.*
 pydantic
@@ -8,5 +8,6 @@ Pillow
 python-docx
 openai
 psycopg[binary]
+bcrypt
 supabase>=2.6.0
 python-dotenv>=1.0.0

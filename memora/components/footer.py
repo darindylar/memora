@@ -7,7 +7,7 @@ def footer() -> rx.Component:
         rx.hstack(
             rx.text("memora", size="3", color="gray", weight="bold"),
             rx.text("|", size="3", color="gray"),
-            rx.text(f"Logged in as: {AuthState.current_username}", size="3", color="gray"),
+            rx.text("You are logged in.", size="3", color="gray"),
             rx.spacer(),
             rx.link("Status", href="/test", underline="hover"),
             rx.link("Settings", href="/settings", underline="hover"),

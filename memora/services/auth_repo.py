@@ -4,7 +4,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List
 import bcrypt
-from .supabase_client import get_client
+from memora.services.supabase_client import get_client
 
 def _first(data: Optional[List[dict]]) -> Optional[dict]:
     return data[0] if (data and len(data) > 0) else None
